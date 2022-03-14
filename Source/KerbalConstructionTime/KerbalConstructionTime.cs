@@ -241,6 +241,7 @@ namespace KerbalConstructionTime
                 {
                     dataModule.Data.FacilityBuiltIn = KCTGameStates.LaunchedVessel.FacilityBuiltIn;
                     dataModule.Data.VesselID = KCTGameStates.LaunchedVessel.KCTPersistentID;
+                    dataModule.Data.LCID = KCTGameStates.LaunchedVessel.LC.ID.ToString("N");
                 }
             }
 
@@ -605,13 +606,9 @@ namespace KerbalConstructionTime
                     for (int j = ksc.LaunchComplexes.Count - 1; j >= 0; j--)
                     {
                         LCItem currentLC = ksc.LaunchComplexes[j];
-                        for (int i = currentLC.VABList.Count - 1; i >= 0; i--)
-                            currentLC.VABList[i].IncrementProgress(UTDiff);
 
-                        for (int i = currentLC.SPHList.Count - 1; i >= 0; i--)
-                            currentLC.SPHList[i].IncrementProgress(UTDiff);
-
-
+                        for (int i = currentLC.BuildList.Count - 1; i >= 0; i--)
+                            currentLC.BuildList[i].IncrementProgress(UTDiff);
 
                         for (int i = currentLC.Recon_Rollout.Count - 1; i >= 0; i--)
                         {
@@ -627,8 +624,7 @@ namespace KerbalConstructionTime
                             Profiler.EndSample();
                         }
 
-                        currentLC.Recon_Rollout.RemoveAll(rr => !PresetManager.Instance.ActivePreset.GeneralSettings.ReconditioningTimes ||
-                                                            (rr.RRType != ReconRollout.RolloutReconType.Rollout && rr.IsComplete()));
+                        currentLC.Recon_Rollout.RemoveAll(rr => rr.RRType != ReconRollout.RolloutReconType.Rollout && rr.IsComplete());
 
                         for (int i = currentLC.AirlaunchPrep.Count - 1; i >= 0; i--)
                             currentLC.AirlaunchPrep[i].IncrementProgress(UTDiff);
@@ -717,7 +713,7 @@ namespace KerbalConstructionTime
                 {
                     foreach (LCItem currentLC in KSC.LaunchComplexes)
                     {
-                        foreach (BuildListVessel blv in currentLC.VABList)
+                        foreach (BuildListVessel blv in currentLC.BuildList)
                         {
                             if (!blv.AllPartsValid)
                             {
@@ -725,23 +721,7 @@ namespace KerbalConstructionTime
                                 erroredVessels.Add(blv);
                             }
                         }
-                        foreach (BuildListVessel blv in currentLC.VABWarehouse)
-                        {
-                            if (!blv.AllPartsValid)
-                            {
-                                KCTDebug.Log(blv.ShipName + " contains invalid parts!");
-                                erroredVessels.Add(blv);
-                            }
-                        }
-                        foreach (BuildListVessel blv in currentLC.SPHList)
-                        {
-                            if (!blv.AllPartsValid)
-                            {
-                                KCTDebug.Log(blv.ShipName + " contains invalid parts!");
-                                erroredVessels.Add(blv);
-                            }
-                        }
-                        foreach (BuildListVessel blv in currentLC.SPHWarehouse)
+                        foreach (BuildListVessel blv in currentLC.Warehouse)
                         {
                             if (!blv.AllPartsValid)
                             {
