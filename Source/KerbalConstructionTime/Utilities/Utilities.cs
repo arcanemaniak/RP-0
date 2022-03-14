@@ -917,6 +917,7 @@ namespace KerbalConstructionTime
 
             newShip.FacilityBuiltIn = editableShip.FacilityBuiltIn;
             newShip.KCTPersistentID = editableShip.KCTPersistentID;
+            newShip.LC = editableShip.LC;
 
             editableShip.RemoveFromBuildList();
 
