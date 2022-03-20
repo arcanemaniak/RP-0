@@ -449,7 +449,7 @@ namespace KerbalConstructionTime
                 {
                     if (Utilities.GetBuildingUpgradeLevel(SpaceCenterFacility.LaunchPad) != pad.level)
                     {
-                        KCTGameStates.ActiveKSC.ActiveLaunchComplexInstance.SwitchLaunchPad(KCTGameStates.ActiveKSC.ActiveLaunchComplexInstance.ActiveLaunchPadID, false);
+                        KCTGameStates.ActiveKSC.ActiveLaunchComplexInstance.SwitchLaunchPad(KCTGameStates.ActiveKSC.ActiveLaunchComplexInstance.ActiveLaunchPadIndex, false);
                         pad.UpdateLaunchpadDestructionState(false);
                     }
                 }
@@ -605,7 +605,7 @@ namespace KerbalConstructionTime
                     for (int j = ksc.LaunchComplexes.Count - 1; j >= 0; j--)
                     {
                         LCItem currentLC = ksc.LaunchComplexes[j];
-                        if (!currentLC.isOperational)
+                        if (!currentLC.IsOperational)
                             continue;
 
                         if (!currentLC.CanModify &&  currentLC.Personnel > 0)
