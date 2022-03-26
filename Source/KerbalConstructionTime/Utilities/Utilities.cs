@@ -2036,6 +2036,7 @@ namespace KerbalConstructionTime
             currentLC.EfficiencyEngineers = PredictEfficiencyEngineers(currentLC, delta);
 
             currentLC.Engineers += delta;
+            KCTEvents.OnPersonnelChange.Fire();
         }
 
         public static void ChangeEngineers(KSCItem ksc, int delta)
@@ -2043,6 +2044,7 @@ namespace KerbalConstructionTime
             KCTGameStates.EfficiecnyEngineers = PredictEfficiencyEngineers(delta);
 
             ksc.Engineers += delta;
+            KCTEvents.OnPersonnelChange.Fire();
         }
 
         public static void ChangeResearchers(int delta)
@@ -2050,6 +2052,7 @@ namespace KerbalConstructionTime
             KCTGameStates.EfficiencyResearchers = PredictEfficiencyResearchers(delta);
 
             KCTGameStates.Researchers += delta;
+            KCTEvents.OnPersonnelChange.Fire();
         }
 
         public static double PredictEfficiencyEngineers(LCItem currentLC, int delta)
