@@ -1710,7 +1710,7 @@ namespace KerbalConstructionTime
             //also set the editor ui to 1 height
             KCT_GUI.EditorWindowPosition.height = 1;
 
-            var kctInstance = (EditorAddon)KerbalConstructionTime.Instance;
+            var kctInstance = KerbalConstructionTime.Instance as EditorAddon;
 
             if (KCTGameStates.Settings.OverrideLaunchButton)
             {
@@ -1731,6 +1731,9 @@ namespace KerbalConstructionTime
                 EditorLogic.fetch.launchBtn.onClick.RemoveAllListeners();
                 EditorLogic.fetch.launchBtn.onClick.AddListener(() => { KerbalConstructionTime.ShowLaunchAlert(null); });
 
+                if (kctInstance == null)
+                    return;
+
                 if (!kctInstance.IsLaunchSiteControllerDisabled)
                 {
                     kctInstance.IsLaunchSiteControllerDisabled = true;
@@ -1746,7 +1749,7 @@ namespace KerbalConstructionTime
                     }
                 }
             }
-            else
+            else if(kctInstance != null)
             {
                 InputLockManager.SetControlLock(ControlTypes.EDITOR_LAUNCH, KerbalConstructionTime.KCTLaunchLock);
                 if (!kctInstance.IsLaunchSiteControllerDisabled)
@@ -2116,6 +2119,7 @@ namespace KerbalConstructionTime
         }
 
         private const double MaxSecondsForDayDisplay = 7d * 86400d;
+        private const double MaxTimeToDisplay = 100d * 365d * 86400d;
 
         public static string GetColonFormattedTime(double t, double extraTime = 0d, bool flip = false)
         {
@@ -2123,6 +2127,10 @@ namespace KerbalConstructionTime
                 return "(infinity)";
 
             bool shouldUseDate = KCTGameStates.Settings.UseDates && t > MaxSecondsForDayDisplay;
+            double timeCheck = (shouldUseDate ^ flip) ? extraTime + t : t;
+            if (timeCheck > MaxTimeToDisplay)
+                return "(infinity)";
+
             if (shouldUseDate ^ flip)
                 return KSPUtil.dateTimeFormatter.PrintDateCompact(GetUT() + extraTime + t, false, false);
 
@@ -2134,7 +2142,12 @@ namespace KerbalConstructionTime
             if (double.IsNaN(t) || double.IsInfinity(t))
                 return "(infinity)";
 
-            if (KCTGameStates.Settings.UseDates && t > MaxSecondsForDayDisplay && allowDate)
+            bool shouldUseDate = KCTGameStates.Settings.UseDates && t > MaxSecondsForDayDisplay && allowDate;
+            double timeCheck = shouldUseDate ? extraTime + t : t;
+            if (timeCheck > MaxTimeToDisplay)
+                return "(infinity)";
+
+            if (shouldUseDate)
                 return KSPUtil.dateTimeFormatter.PrintDate(GetUT() + extraTime + t, false, false);
 
             return MagiCore.Utilities.GetFormattedTime(t);
