@@ -23,7 +23,11 @@
 		{ "name" : "MagiCore" },
 		{ "name" : "ClickThroughBlocker" },
 		{ "name" : "ToolbarController" },
-		{ "name" : "Kerbalism-Config-RO" }
+		{ "name" : "Kerbalism-Config-RO" },
+		{ 
+			"name" : "KSPCommunityFixes",
+			"min_version": "1.10.0"
+		}
 	],
 	"recommends" : [
 		{ "name" : "RSSDateTimeFormatter" },
