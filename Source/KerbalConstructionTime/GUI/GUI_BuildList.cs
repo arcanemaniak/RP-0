@@ -1636,7 +1636,7 @@ namespace KerbalConstructionTime
 
             if (GUILayout.Button("Duplicate"))
             {
-                Utilities.TryAddVesselToBuildList(b.CreateCopy(true));
+                Utilities.TryAddVesselToBuildList(b.CreateCopy(true), skipPartChecks: true);
             }
 
             if (GUILayout.Button("Add to Plans"))
